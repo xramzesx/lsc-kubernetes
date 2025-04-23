@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lsc-nginx-server
+  namespace: lsc-ns
+  labels:
+    app: lsc-nginx-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lsc-nginx-server
+  template:
+    metadata:
+      labels:
+        app: lsc-nginx-server
+    spec:
+      containers:
+        - name: lsc-nginx-server
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: lsc-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: lsc-volume
+          persistentVolumeClaim:
+            claimName: lsc-pvc
